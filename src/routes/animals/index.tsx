@@ -1,7 +1,7 @@
-import "./App.css";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { graphql } from "./graphql";
-import { execute } from "./execute";
+import { graphql } from "src/graphql";
+import { execute } from "src/execute";
 
 const animalsQuery = graphql(`
   query Animals {
@@ -15,14 +15,18 @@ const animalsQuery = graphql(`
   }
 `);
 
-function App() {
+export const Route = createFileRoute("/animals/")({
+  component: Index,
+});
+
+function Index() {
   const { data } = useQuery({
     queryKey: ["animals"],
     queryFn: () => execute(animalsQuery),
   });
-
   return (
-    <>
+    <div className="p-2">
+      <h1 className="text-3xl font-bold">Hello world!</h1>
       <table>
         <thead>
           <tr>
@@ -36,7 +40,16 @@ function App() {
         <tbody>
           {data?.animals.map((animal) => (
             <tr key={animal.id}>
-              <td>{animal.name}</td>
+              <td>
+                <Link
+                  to={`/animals/$animalId`}
+                  params={{
+                    animalId: animal.id,
+                  }}
+                >
+                  {animal.name}
+                </Link>
+              </td>
               <td>{animal.id}</td>
               <td>{animal.species}</td>
               <td>
@@ -49,8 +62,6 @@ function App() {
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
-
-export default App;
