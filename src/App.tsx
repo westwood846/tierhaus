@@ -1,10 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchAnimals = async () =>
+  fetch("http://localhost:8082/v1/graphql", {
+    method: "POST",
+    body: JSON.stringify({
+      query: `
+    {
+  animals {
+    name
+		species
+		created_at
+		updated_at
+		id
+  }
+}
+    `,
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => res.data);
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+
+  const { isSuccess, data } = useQuery({
+    queryKey: ["animals"],
+    queryFn: fetchAnimals,
+  });
 
   return (
     <>
@@ -25,11 +51,9 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <p className="read-the-docs">{JSON.stringify({ data }, null, 2)}</p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
