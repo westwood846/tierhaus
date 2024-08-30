@@ -15,6 +15,7 @@ const animalQuery = graphql(`
       species
       born_at
       weight_grams
+      description_visual
     }
   }
 `);
@@ -34,7 +35,7 @@ function AnimalDetails() {
   }
 
   return (
-    <div className="p-2">
+    <div className="prose p-2">
       <h1>{animal.name}</h1>
       <p>ID: {animal.id}</p>
       <p>Species: {animal.species}</p>
@@ -43,6 +44,7 @@ function AnimalDetails() {
         y/o
       </p>
       <p>Weight: {(animal.weight_grams / 1000).toFixed(2)} kg</p>
+      <p>Description: {animal.description_visual}</p>
     </div>
   );
 }
