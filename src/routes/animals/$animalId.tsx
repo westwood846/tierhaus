@@ -1,11 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { execute } from "src/execute";
 import { graphql } from "src/graphql";
-
-export const Route = createLazyFileRoute("/animals/$animalId")({
-  component: AnimalDetails,
-});
+import { queryClient } from "src/query-client";
 
 const animalQuery = graphql(`
   query Animal($animalId: uuid!) {
@@ -20,19 +17,23 @@ const animalQuery = graphql(`
   }
 `);
 
-function AnimalDetails() {
-  const { animalId } = Route.useParams();
-
-  const { data } = useQuery({
+const getQueryOptions = (params: { animalId: string }) =>
+  queryOptions({
     queryKey: ["animals"],
-    queryFn: () => execute(animalQuery, { animalId }),
+    queryFn: () => execute(animalQuery, params),
   });
 
-  const animal = data?.animals_by_pk;
+export const Route = createFileRoute("/animals/$animalId")({
+  component: AnimalDetails,
+  loader: ({ params }) => queryClient.ensureQueryData(getQueryOptions(params)),
+});
 
-  if (!animal) {
-    return <div>Loading...</div>;
-  }
+function AnimalDetails() {
+  const params = Route.useParams();
+  const { data } = useSuspenseQuery(getQueryOptions(params));
+  const animal = data.animals_by_pk;
+
+  if (!animal) throw new Error("Animal not found");
 
   return (
     <div className="prose p-2">
