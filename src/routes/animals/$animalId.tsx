@@ -1,5 +1,7 @@
+import { Description, Field, Input, Label } from "@headlessui/react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import clsx from "clsx/lite";
 import { execute } from "src/execute";
 import { graphql } from "src/graphql";
 import { queryClient } from "src/query-client";
@@ -46,6 +48,18 @@ function AnimalDetails() {
       </p>
       <p>Weight: {(animal.weight_grams / 1000).toFixed(2)} kg</p>
       <p>Description: {animal.description_visual}</p>
+      <div>
+        <Field>
+        <Label className="text-sm/6 font-medium text-white">Name</Label>
+        <Description className="text-sm/6 text-white/50">Change {animal.name}'s name.</Description>
+        <Input
+          className={clsx(
+            'mt-3 block w-full rounded-lg py-1.5 px-3 border-2',
+            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2'
+          )}
+        />
+        </Field>
+      </div>
     </div>
   );
 }
