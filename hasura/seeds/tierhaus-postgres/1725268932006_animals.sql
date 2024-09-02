@@ -1,0 +1,3 @@
+SET check_function_bodies = false;
+INSERT INTO public.animals (id, created_at, updated_at, name, species, image_src, weight_grams, born_at, description_visual) VALUES ('e2429746-0c46-457d-90da-ff0ac9cb1075', '2024-08-29 20:27:09.885112+00', '2024-08-30 16:01:24.332682+00', 'Heino', 'Felis catus', NULL, 4000, NULL, 'Gray tabby, solidly built. Intelligent, green eyes.');
+INSERT INTO public.animals (id, created_at, updated_at, name, species, image_src, weight_grams, born_at, description_visual) VALUES ('284d580f-99a6-4481-9d36-6e7f09d3d3ce', '2024-08-29 20:26:09.357226+00', '2024-08-30 16:08:49.374744+00', 'Olivia', 'Felis catus', NULL, 7000, NULL, 'Brownish calico with a white chest, pink nose and pink ears. Olive eyes. Very overweight.');
